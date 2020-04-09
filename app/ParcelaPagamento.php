@@ -56,6 +56,7 @@ class ParcelaPagamento extends Model {
 			$query->where( 'idprofissional', $data['idprofissional'] );
 		}
 
+
 		$query = ParcelaPagamento::whereIn( 'idparcela',
 			Parcela::whereIn( 'idpagamento',
 				Pagamento::whereIn( 'idorcamento', $query->pluck( 'idorcamento' ) )->pluck( 'idpagamento' )
@@ -72,6 +73,11 @@ class ParcelaPagamento extends Model {
 		//filtro recbidos gerados
 		if ( isset( $data['emitidas'] ) && ( $data['emitidas'] != '' ) ) {
 			$query->whereNotNull( 'recibo_em' );
+		}
+
+		//filtro idtipo_pagamento
+		if ( isset( $data['idtipo_pagamento'] ) && ( $data['idtipo_pagamento'] != '' ) ) {
+			$query->where( 'idtipo_pagamento', $data['idtipo_pagamento'] );
 		}
 
 		return $query->get();
@@ -127,6 +133,10 @@ class ParcelaPagamento extends Model {
 
 	public function parcela() {
 		return $this->belongsTo( 'App\Parcela', 'idparcela' );
+	}
+
+	public function tipo_pagamento() {
+		return $this->belongsTo( TipoPagamento::class, 'idtipo_pagamento' );
 	}
 
 	public function paciente() {

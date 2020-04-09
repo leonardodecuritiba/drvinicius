@@ -34,7 +34,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="ln_solid"></div>
                 <div class="row">
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <label class="control-label col-md-2 col-sm-2 col-xs-12" for="first-name">Cirurgião:</label>
@@ -51,7 +50,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="ln_solid"></div>
                 <div class="row">
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <label class="control-label col-md-2 col-sm-2 col-xs-12" for="first-name">Plano:</label>
@@ -68,7 +66,23 @@
                         </div>
                     </div>
                 </div>
-                <div class="ln_solid"></div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12" for="idtipo_pagamento">Tipo de
+                            Pagamento:</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                            <select class="form-control select2_single" name="idtipo_pagamento">
+                                <option value="">Todos</option>
+                                @foreach($Page->TipoPagamentos as $selecao)
+                                    <option value="{{$selecao->idtipo_pagamento}}"
+                                            @if(Request::has('idtipo_pagamento') && (Request::get('idtipo_pagamento') == $selecao->idtipo_pagamento)) selected @endif
+                                    >{{$selecao->nome}}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <label class="control-label col-md-2 col-sm-2 col-xs-12">Paciente:</label>
@@ -118,6 +132,7 @@
                                     <th>CPF</th>
                                     <th>Tratamento</th>
                                     <th>Valor</th>
+                                    <th>Tipo de Pagamento</th>
                                     <th>Responsável</th>
                                     <th>Emitido em</th>
                                     <th>Ações</th>
@@ -135,6 +150,7 @@
                                         <td>{{$recebimento->paciente()->cpf}}</td>
                                         <td>{{$recebimento->orcamento()->descricao}}</td>
                                         <td data-order="{{$recebimento->valor}}">{{$recebimento->getValorReal()}}</td>
+                                        <td>{{$recebimento->tipo_pagamento->nome}}</td>
                                         <td>{{$recebimento->profissional()->nome}}</td>
                                         <td>{{$recebimento->recibo_em_f}}</td>
                                         <td>

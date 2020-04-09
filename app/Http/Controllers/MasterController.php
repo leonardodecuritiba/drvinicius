@@ -12,6 +12,7 @@ use App\ParcelaPagamento;
 use App\Plano;
 use App\Profissional;
 use App\Retorno;
+use App\TipoPagamento;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -124,12 +125,13 @@ class MasterController extends Controller {
 
 //        return Paciente::whereIn('idpaciente', )->get();
 		$Page = (object) [
-			'Targets'       => 'Recebimentos',
-			'Target'        => 'Recebimentos',
-			'Titulo'        => 'Recebimentos encontrados',
-			'Pacientes'     => Paciente::orderBy( 'nome', 'ASC' )->get(),
-			'Planos'        => Plano::all(),
-			'Profissionais' => Profissional::all()
+			'Targets'        => 'Recebimentos',
+			'Target'         => 'Recebimentos',
+			'Titulo'         => 'Recebimentos encontrados',
+			'Pacientes'      => Paciente::orderBy( 'nome', 'ASC' )->get(),
+			'Planos'         => Plano::all(),
+			'Profissionais'  => Profissional::all(),
+			'TipoPagamentos' => TipoPagamento::get( [ 'nome', 'idtipo_pagamento' ] ),
 		];
 
 		return view( 'pages.master.recebimentos' )
@@ -149,6 +151,7 @@ class MasterController extends Controller {
 				'Tratamento',
 				'Valor',
 				'Responsável',
+				'Tipo de Pagamento',
 			); //porcentagem
 
 			$sheet->row( 1, $dados );
@@ -161,7 +164,8 @@ class MasterController extends Controller {
 					$recebimento->paciente()->cpf,
 					$recebimento->orcamento()->descricao,
 					$recebimento->getValorReal(),
-					$recebimento->profissional()->nome
+					$recebimento->profissional()->nome,
+					$recebimento->tipo_pagamento->nome
 				) );
 				$i ++;
 			}
@@ -172,12 +176,13 @@ class MasterController extends Controller {
 		$request->merge( [ 'emitidas' => true ] );
 		$Buscas = ParcelaPagamento::filter( $request->all() );
 		$Page   = (object) [
-			'Targets'       => 'Recibos',
-			'Target'        => 'Recibos',
-			'Titulo'        => 'Recibos encontrados',
-			'Pacientes'     => Paciente::orderBy( 'nome', 'ASC' )->get(),
-			'Planos'        => Plano::all(),
-			'Profissionais' => Profissional::all()
+			'Targets'        => 'Recibos',
+			'Target'         => 'Recibos',
+			'Titulo'         => 'Recibos encontrados',
+			'Pacientes'      => Paciente::orderBy( 'nome', 'ASC' )->get(),
+			'Planos'         => Plano::all(),
+			'Profissionais'  => Profissional::all(),
+			'TipoPagamentos' => TipoPagamento::get( [ 'nome', 'idtipo_pagamento' ] ),
 		];
 
 		return view( 'pages.master.recibos' )
@@ -207,6 +212,7 @@ class MasterController extends Controller {
 				'Valor',
 				'Responsável',
 				'Emitido em',
+				'Tipo de Pagamento',
 			); //porcentagem
 
 			$sheet->row( 1, $dados );
@@ -220,7 +226,8 @@ class MasterController extends Controller {
 					$recebimento->orcamento()->descricao,
 					$recebimento->getValorReal(),
 					$recebimento->profissional()->nome,
-					$recebimento->recibo_em_f
+					$recebimento->recibo_em_f,
+					$recebimento->tipo_pagamento->nome
 				) );
 				$i ++;
 			}
