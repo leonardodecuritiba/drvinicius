@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\DataHelper;
 use App\Helpers\PrintHelper;
 use App\Parcela;
 use App\ParcelaPagamento;

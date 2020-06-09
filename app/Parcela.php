@@ -18,6 +18,9 @@ class Parcela extends Model {
 		'data_pagamento',
 		'valor'
 	];
+	protected $casts = [
+		'pago' => 'boolean',
+	];
 
 	// ******************** FUNCTIONS ****************************
 	static public function getFromPagamento( $ids ) {
@@ -105,7 +108,7 @@ class Parcela extends Model {
 	 * @return \Illuminate\Database\Eloquent\Builder
 	 */
 	public function scopeVencidas( $query ) {
-		return $query->where( 'pago', 0 )
+		return $query->where( 'pago', false )
 		             ->whereNull( 'data_pagamento' )
 		             ->where( 'data_vencimento', '<=', Carbon::now() );
 	}

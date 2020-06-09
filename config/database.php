@@ -62,7 +62,12 @@ return [
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
-			'strict'    => false,
+//			'strict'    => false,
+			'options'   => array(
+				PDO::ATTR_STRINGIFY_FETCHES     => false,
+				PDO::ATTR_EMULATE_PREPARES      => false,
+				MYSQLI_OPT_INT_AND_FLOAT_NATIVE => true,
+			),
 			'engine'    => null,
 		],
 

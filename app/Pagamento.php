@@ -18,7 +18,7 @@ class Pagamento extends Model {
 	*/
 
 	public function getStatusText() {
-		$abertas = $this->parcelas()->where( 'pago', 0 )->count();
+		$abertas = $this->parcelas()->where( 'pago', false )->count();
 
 		return ( $abertas > 0 ) ? 'Pendente' : 'Recebido';
 	}
@@ -28,7 +28,7 @@ class Pagamento extends Model {
 	}
 
 	public function getStatusColor() {
-		$abertas = $this->parcelas()->where( 'pago', 0 )->count();
+		$abertas = $this->parcelas()->where( 'pago', false )->count();
 
 		return ( $abertas > 0 ) ? 'danger' : 'success';
 	}
@@ -57,7 +57,7 @@ class Pagamento extends Model {
 	}
 
 	public function parcelas_pagas() {
-		return $this->parcelas->where( 'pago', 1 )->map( function ( $parcela ) {
+		return $this->parcelas->where( 'pago', true )->map( function ( $parcela ) {
 			$parcela->valor_formatado = $parcela->getValorTotalReal();
 
 			return $parcela;
@@ -67,7 +67,7 @@ class Pagamento extends Model {
 	// Relação orcamento - 1 <-> 1 - pagamento.
 
 	public function parcelas_pendentes() {
-		return $this->parcelas->where( 'pago', 0 )->map( function ( $p ) {
+		return $this->parcelas->where( 'pago', false )->map( function ( $p ) {
 			$p->total_pago     = $p->parcela_pagamentos->sum( 'valor' );
 			$p->total_pendente = $p->valor - $p->total_pago;
 
